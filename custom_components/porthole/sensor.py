@@ -93,7 +93,7 @@ class PortainerServer:
         if self._session:
             await self._session.close()
         
-    async def async_update_task():
+    async def async_update_task(self):
         """Update the data from Portainer API."""
         if not self._jwt:
             self._jwt = await self._get_jwt()
