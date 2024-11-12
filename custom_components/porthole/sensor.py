@@ -181,7 +181,7 @@ class PortainerServer:
     @Throttle(MIN_TIME_BETWEEN_UPDATES)  # Throttle the updates
     async def update(self):
         # Start the long task asynchronously
-        await asyncio.create_task(async_update_task())
+        await asyncio.create_task(self.async_update_task())
 
     async def _get_jwt(self):
         """Get JWT for authentication."""
