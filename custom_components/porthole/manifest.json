@@ -1,0 +1,15 @@
+{
+  "domain": "porthole",
+  "name": "Porthole",
+  "version": "2024.11.12",
+  "codeowners": ["@c3p0vsr2d2"],
+  "dependencies": [],
+  "documentation": "https://github.com/c3p0vsr2d2/porthole",
+  "integration_type": "hub",
+  "requirements": ["aiohttp"],  
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/c3p0vsr2d2/porthole/issues",
+  "reload": true,
+  "config_flow": true
+}
+
