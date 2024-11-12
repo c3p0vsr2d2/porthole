@@ -240,6 +240,41 @@ class PortainerServer:
                 if public_port != "N/A" and private_port != "N/A":
                     ports.append(f"{public_port}->{private_port}/{port_type}")
         return ports if ports else ["No ports exposed"]  # Return a default message if no ports are found
+        
+    async def start_container(self, endpoint_id, container_id, endpoint_index, container_index):
+        # Build the start URL
+        start_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/start"
+        headers = {"Authorization": f"Bearer {self._jwt}"}
+
+        async with aiohttp.ClientSession() as session:
+            # Use POST request to start the container
+            async with session.post(start_url, headers=headers) as response:
+                if response.status == 204:
+                    # Successfully started, no content to return
+                    print(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
+                    return response.status  # Or just return the status code if no data is needed
+                else:
+                    # If the request fails, print the error message
+                    print(f"Failed to start container with ID '{container_id}': {await response.text()}")
+                    response.raise_for_status()  # Raise exception for 4xx/5xx responses
+                
+    async def stop_container(self, endpoint_id, container_id, endpoint_index, container_index):
+        # Build the start URL
+        stop_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
+        headers = {"Authorization": f"Bearer {self._jwt}"}
+
+        async with aiohttp.ClientSession() as session:
+            # Use POST request to start the container
+            async with session.post(stop_url, headers=headers) as response:
+                if response.status == 204:
+                    # Successfully stopped, no content to return
+                    print(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
+                    return response.status  # Or just return the status code if no data is needed
+                else:
+                    # If the request fails, print the error message
+                    print(f"Failed to stop container with ID '{container_id}': {await response.text()}")
+                    response.raise_for_status()  # Raise exception for 4xx/5xx responses
+
 
 class PortainerServerSensor(SensorEntity):
     """Sensor representing the Portainer server."""
