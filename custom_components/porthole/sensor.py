@@ -95,6 +95,10 @@ class PortainerServer:
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)  # Throttle the updates
     async def update(self):
+        # Start the long task asynchronously
+        await asyncio.create_task(async_update_task())
+        
+    async def async_update_task():
         """Update the data from Portainer API."""
         if not self._jwt:
             self._jwt = await self._get_jwt()
