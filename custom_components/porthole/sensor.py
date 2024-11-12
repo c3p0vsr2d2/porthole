@@ -93,7 +93,8 @@ class PortainerServer:
         if self._session:
             await self._session.close()
         
-    async def async_update_task(self):
+    @Throttle(MIN_TIME_BETWEEN_UPDATES)  # Throttle the updates
+    async def update(self):
         """Update the data from Portainer API."""
         if not self._jwt:
             self._jwt = await self._get_jwt()
@@ -177,11 +178,6 @@ class PortainerServer:
             _LOGGER.debug(self.portainer_obj)
         else:
             _LOGGER.error("Failed to authenticate with Portainer.")
-
-    @Throttle(MIN_TIME_BETWEEN_UPDATES)  # Throttle the updates
-    async def update(self):
-        # Start the long task asynchronously
-        await asyncio.create_task(self.async_update_task())
 
     async def _get_jwt(self):
         """Get JWT for authentication."""
