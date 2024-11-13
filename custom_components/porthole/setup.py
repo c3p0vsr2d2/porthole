@@ -16,9 +16,11 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
+from .setup import PortainerServer
 from .sensors import PortainerServerSensor, PortainerEndpointSensor, PortainerContainerSensor
 from .devices import PortainerEndpointDevice
 from .switches import PortainerContainerSwitch
+
 
 _LOGGER = logging.getLogger(__name__)
 
