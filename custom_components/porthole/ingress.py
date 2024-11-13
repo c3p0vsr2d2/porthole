@@ -18,9 +18,6 @@ from .portainer import PortainerServer
 
 _LOGGER = logging.getLogger(__name__)
 
-# Define the minimum time between updates (e.g., 5 minutes)
-MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
-
 # Function to set up sensors from config entry
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the Portainer sensor platform from a config entry."""
