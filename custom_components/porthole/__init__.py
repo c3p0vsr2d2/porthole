@@ -7,7 +7,7 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
-PLATFORM_SENSOR = "sensor"
+PLATFORM_SENSOR = "ingress"
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Portainer integration without a config entry."""
