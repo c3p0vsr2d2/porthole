@@ -10,6 +10,8 @@ from homeassistant.helpers.device_registry import DeviceEntry
 
 from homeassistant.util import Throttle
 
+from porthole import PortainerServer
+
 class PortainerContainerSwitch(SwitchEntity):
 
     def __init__(self, portainer, endpoint_index, container_index):
