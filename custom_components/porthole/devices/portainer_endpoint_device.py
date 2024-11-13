@@ -11,6 +11,8 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
+from porthole import PortainerServer
+
 class PortainerEndpointDevice(Entity):
     """Device representing a Portainer endpoint."""
     
