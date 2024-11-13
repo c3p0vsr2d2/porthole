@@ -1,3 +1,5 @@
+from ..portainer.portainer_server import PortainerServer
+
 class PortainerContainerSwitch(SwitchEntity):
 
     def __init__(self, portainer, endpoint_index, container_index):
