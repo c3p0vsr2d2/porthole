@@ -11,6 +11,10 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
+from .sensors import PortainerServerSensor, PortainerEndpointSensor, PortainerContainerSensor
+from .devices import PortainerEndpointDevice
+from .switches import PortainerContainerSwitch
+
 _LOGGER = logging.getLogger(__name__)
 
 # Define the minimum time between updates (e.g., 5 minutes)
