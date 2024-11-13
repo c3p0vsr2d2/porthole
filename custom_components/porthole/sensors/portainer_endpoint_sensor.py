@@ -1,3 +1,5 @@
+from ..portainer.portainer_server import PortainerServer
+
 class PortainerEndpointSensor(SensorEntity):
     """Sensor representing the Portainer server."""
 
