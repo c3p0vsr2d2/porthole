@@ -16,7 +16,6 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
-from . import PortainerServer
 from .sensors import PortainerServerSensor, PortainerEndpointSensor, PortainerContainerSensor
 from .devices import PortainerEndpointDevice
 from .switches import PortainerContainerSwitch
