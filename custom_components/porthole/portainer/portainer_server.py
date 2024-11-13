@@ -1,3 +1,16 @@
+import logging
+from datetime import timedelta, datetime
+import aiohttp
+
+from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.switch import SwitchEntity
+
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.device_registry import DeviceEntry
+import asyncio
+from homeassistant.util import Throttle
+
 class PortainerServer:
     """Class to handle communication with the Portainer API."""
     
