@@ -49,7 +49,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         await portainer.update()  # Run the update asynchronously
     except Exception as e:
         _LOGGER.error(f"Error initializing Portainer data: {e}")
-        return
+        return False
     
     try:
         # Add a server sensor for the Portainer server itself
@@ -57,6 +57,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         async_add_entities([server_sensor], update_before_add=True)
     except Exception as e:
         _LOGGER.error(f"Error adding Portainer Server sensor: {e}")
+        return False
         
     try:
         # Add a device for each endpoint
@@ -67,12 +68,14 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 device = PortainerEndpointDevice(hass, entry, url, portainer, endpoint_index)
             except Exception as e:
                 _LOGGER.error(f"Error initializing Portainer Endpoint Device {endpoint_index}, {endpoint_id}: {e}")
+                return False
 
             try:
                 endpoint_sensor = PortainerEndpointSensor(portainer, endpoint_index)
                 async_add_entities([endpoint_sensor], update_before_add=True)
             except Exception as e:
                 _LOGGER.error(f"Error adding Portainer Endpoint sensor {endpoint_index}, {endpoint_id}: {e}")
+                return False
 
             try:
                 # Create container sensors associated with the device
@@ -84,9 +87,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 async_add_entities(container_sensors, update_before_add=True)
             except Exception as e:
                 _LOGGER.error(f"Error adding Portainer Container Sensors: {e}")
+                return False
         
     except Exception as e:
         _LOGGER.error(f"Error adding Portainer sensors: {e}")
+        return False
+
+    return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a Portainer config entry."""
