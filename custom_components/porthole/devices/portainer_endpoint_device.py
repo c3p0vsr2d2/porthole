@@ -1,3 +1,5 @@
+from ..portainer.portainer_server import PortainerServer
+
 class PortainerEndpointDevice(Entity):
     """Device representing a Portainer endpoint."""
     
