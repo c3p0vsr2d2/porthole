@@ -576,7 +576,7 @@ class PortainerContainerSwitch(SwitchEntity):
         """Turn the switch on."""
         _LOGGER.info(f"Turning on the switch: {self._name}")
         response = self._portainer_obj.start_container(self._endpoint_id, self._container_id)
-        if (response ! None):
+        if (response != None):
             self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
 
     def turn_off(self, **kwargs) -> None:
