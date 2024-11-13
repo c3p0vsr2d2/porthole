@@ -11,6 +11,9 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
+# Define the minimum time between updates (e.g., 5 minutes)
+MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
+
 class PortainerServer:
     """Class to handle communication with the Portainer API."""
     
