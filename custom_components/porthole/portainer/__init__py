@@ -1,2 +1,2 @@
 # portainer/__init__.py
-from .portainer_server import PortainerServer
+from .portainer import PortainerServer
