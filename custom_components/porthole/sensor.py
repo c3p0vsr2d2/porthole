@@ -244,7 +244,7 @@ class PortainerServer:
                     ports.append(f"{public_port}->{private_port}/{port_type}")
         return ports if ports else ["No ports exposed"]  # Return a default message if no ports are found
         
-    async def start_container(self, endpoint_id, container_id, endpoint_index, container_index):
+    async def start_container(self, endpoint_id, container_id):
         # Build the start URL
         start_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/start"
         headers = {"Authorization": f"Bearer {self._jwt}"}
@@ -260,8 +260,9 @@ class PortainerServer:
                     # If the request fails, print the error message
                     print(f"Failed to start container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
+                    return None
                 
-    async def stop_container(self, endpoint_id, container_id, endpoint_index, container_index):
+    async def stop_container(self, endpoint_id, container_id):
         # Build the start URL
         stop_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
         headers = {"Authorization": f"Bearer {self._jwt}"}
@@ -277,6 +278,7 @@ class PortainerServer:
                     # If the request fails, print the error message
                     print(f"Failed to stop container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
+                    return None
 
 
 class PortainerServerSensor(SensorEntity):
@@ -475,6 +477,8 @@ class PortainerContainerSensor(SensorEntity):
         self._portainer_obj = self._portainer.portainer_obj
         self._endpoint_index = endpoint_index
         self._container_index = container_index
+        self._endpoint_id = self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_id"]
+        self._container_id = self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_id"]
     
     @property
     def unique_id(self):
@@ -543,6 +547,8 @@ class PortainerContainerSwitch(SwitchEntity):
         self._portainer_obj = self._portainer.portainer_obj
         self._endpoint_index = endpoint_index
         self._container_index = container_index
+        self._endpoint_id = self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_id"]
+        self._container_id = self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_id"]
         
     @property
     def unique_id(self):
@@ -564,17 +570,25 @@ class PortainerContainerSwitch(SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the switch is on."""
-        return self._state
+        return (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running")
 
     def turn_on(self, **kwargs) -> None:
         """Turn the switch on."""
         _LOGGER.info(f"Turning on the switch: {self._name}")
-        self._state = True
+        response = self._portainer_obj.start_container(self._endpoint_id, self._container_id)
+        if response == None:
+            # do nothing
+        else:
+            self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
 
     def turn_off(self, **kwargs) -> None:
         """Turn the switch off."""
         _LOGGER.info(f"Turning off the switch: {self._name}")
-        self._state = False
+        response = self._portainer_obj.stop_container(self._endpoint_id, self._container_id)
+        if response == None:
+            # do nothing
+        else:
+            self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "stopped"
         
     @property
     def icon(self):
