@@ -11,7 +11,7 @@ from homeassistant.helpers.device_registry import DeviceEntry
 import asyncio
 from homeassistant.util import Throttle
 
-from porthole import PortainerServer
+from ..porthole_server import PortainerServer
 
 class PortainerContainerSensor(SensorEntity):
     """Sensor representing a Portainer container."""
