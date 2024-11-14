@@ -55,7 +55,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Unload the sensor platform if necessary
     try:
         unloaded = await hass.config_entries.async_forward_entry_unload(entry, PLATFORMS)
-        if not unloaded:
+        if unloaded:
+            _LOGGER.info("Successfully unloaded sensor platform for Porthole.")
+        else:
             _LOGGER.warning("Failed to unload sensor platform for Porthole.")
     except Exception as ex:
         _LOGGER.error("Error unloading sensor platform for Porthole: %s", ex)
