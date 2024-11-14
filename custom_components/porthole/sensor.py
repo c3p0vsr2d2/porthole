@@ -26,7 +26,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, entry, async_add_entities):
 
     """Set up Portainer from a config entry."""
-    _LOGGER.error("Setting up Portainer integration with config entry.")
+    _LOGGER.debug("Setting up Portainer integration with config entry.")
     
     """Set up the Portainer sensor platform from a config entry."""
     # Use the configuration data stored in the config entry
