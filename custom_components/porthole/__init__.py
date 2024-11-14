@@ -20,7 +20,7 @@ from .portainer_server import PortainerServer
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
-PLATFORM_SENSOR = "setup"
+PLATFORM_SENSOR = "setup_porthole"
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Portainer integration without a config entry."""
