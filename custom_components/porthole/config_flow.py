@@ -5,7 +5,7 @@ import aiohttp
 from homeassistant import config_entries
 from homeassistant.helpers import aiohttp_client
 from homeassistant.const import CONF_SCAN_INTERVAL
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Any, Optional, Union
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
