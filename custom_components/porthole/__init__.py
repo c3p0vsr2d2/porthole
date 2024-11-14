@@ -20,7 +20,7 @@ from .const import *
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
-PLATFORM_FILE = "setup_porthole"
+PLATFORMS = "sensor"
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Portainer integration without a config entry."""
@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     # Forward the configuration to the sensor platform
     try:
-        await hass.config_entries.async_forward_entry_setups(entry, [PLATFORM_FILE])
+        await hass.config_entries.async_forward_entry_setups(entry, [PLATFORMS])
         _LOGGER.info("Successfully set up sensor platform for Portainer.")
     except Exception as ex:
         _LOGGER.error("Failed to set up sensor platform for Portainer: %s", ex)
@@ -52,7 +52,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     # Unload the sensor platform if necessary
     try:
-        unloaded = await hass.config_entries.async_forward_entry_unload(entry, PLATFORM_FILE)
+        unloaded = await hass.config_entries.async_forward_entry_unload(entry, PLATFORMS)
         if not unloaded:
             _LOGGER.warning("Failed to unload sensor platform for Portainer.")
     except Exception as ex:
