@@ -1,4 +1,0 @@
-# sensors/__init__.py
-from .portainer_server_sensor import PortainerServerSensor
-from .portainer_endpoint_sensor import PortainerEndpointSensor
-from .portainer_container_sensor import PortainerContainerSensor
