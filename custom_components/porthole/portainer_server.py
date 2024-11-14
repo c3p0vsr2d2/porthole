@@ -8,7 +8,7 @@ from homeassistant.components.switch import SwitchEntity
 
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceEntry
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Any, Optional, Union
 import asyncio
 from homeassistant.util import Throttle
 
