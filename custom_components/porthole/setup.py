@@ -27,9 +27,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     """Set up Portainer from a config entry."""
     _LOGGER.error("Setting up Portainer integration with config entry.")
-
-    # Store the config entry data to access later
-    hass.data[DOMAIN] = entry.data
     
     """Set up the Portainer sensor platform from a config entry."""
     # Use the configuration data stored in the config entry
