@@ -19,7 +19,7 @@ class PortainerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._user_input = None
         self._scan_interval = timedelta(minutes=10)  # Default scan interval
 
-    async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None) -> config_entries.FlowResult:
+    async def async_step_user(self, user_input=None) -> config_entries.FlowResult:
         """Handle the initial step of user input."""
         errors: Dict[str, str] = {}
 
