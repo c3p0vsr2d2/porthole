@@ -33,7 +33,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Store the config entry data to access later
     if DOMAIN not in hass.data:
-        hass.data[DOMAIN] = entry_data
+        hass.data[DOMAIN] = entry.data
         _LOGGER.info("Porthole integration data stored in hass.data.")
     else:
         _LOGGER.debug("Porthole integration data already exists in hass.data.")
