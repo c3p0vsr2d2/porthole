@@ -1,7 +1,7 @@
 {
   "domain": "porthole",
   "name": "Porthole",
-  "version": "2024.11.11",
+  "version": "2024.11.14",
   "codeowners": ["@c3p0vsr2d2"],
   "dependencies": [],
   "documentation": "https://github.com/c3p0vsr2d2/porthole",
