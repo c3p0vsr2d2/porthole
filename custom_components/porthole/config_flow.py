@@ -33,16 +33,7 @@ class PortainerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             scan_interval = user_input.get(CONF_SCAN_INTERVAL, 10)
             self._scan_interval = timedelta(minutes=scan_interval)
 
-            # Validate URL format
-            try:
-                vol.Url()(url)  # Validate URL format
-            except vol.Invalid:
-                _LOGGER.error("Invalid URL provided: %s", url)
-                errors["base"] = "invalid_url"
-                return self.async_show_form(
-                    step_id="user", data_schema=self._get_data_schema(), errors=errors
-                )
-
+            # Validate URL format (this is already done by the schema)
             try:
                 # Test the connection to the Portainer API
                 async with aiohttp.ClientSession() as session:
