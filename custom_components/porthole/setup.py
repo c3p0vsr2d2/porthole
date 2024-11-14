@@ -1,24 +1,24 @@
 import aiohttp
 import logging
 from datetime import timedelta, datetime
+import asyncio
 
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import discovery
-
 from homeassistant.helpers.entity import Entity
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.switch import SwitchEntity
-
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceEntry
-import asyncio
 from homeassistant.util import Throttle
 
-from . import PortainerServer
-from .sensors import PortainerServerSensor, PortainerEndpointSensor, PortainerContainerSensor
-from .devices import PortainerEndpointDevice
-from .switches import PortainerContainerSwitch
+from .portainer_server import PortainerServer
+from .devices.portainer_endpoint_device import PortainerEndpointDevice
+from .sensors.portainer_server_sensor import PortainerServerSensor
+from .sensors.portainer_endpoint_sensor import PortainerEndpointSensor
+from .sensors.portainer_container_sensor import PortainerContainerSensor
+from .switches.portainer_container_switch import PortainerContainerSwitch
 
 _LOGGER = logging.getLogger(__name__)
 
