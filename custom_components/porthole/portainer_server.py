@@ -14,6 +14,8 @@ from homeassistant.util import Throttle
 # Define the minimum time between updates (e.g., 5 minutes)
 MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
 
+_LOGGER = logging.getLogger(__name__)
+
 class PortainerServer:
     """Class to handle communication with the Portainer API."""
     
