@@ -84,6 +84,17 @@ class PortainerContainerSwitch(SwitchEntity):
             "Version": self._portainer_obj["portainer_version"],
         }
 
+    @property
+    def device_info(self):
+        """Return device specific attributes."""
+        # Device unique identifier is the serial
+        endpoint_info = self._portainer_obj["endpoints"][self._endpoint_index]
+        return {
+            "identifiers": {(f"portainer_{self._portainer_obj["portainer_id"]}", endpoint_info["endpoint_id"])},
+            "name": endpoint_info["name"],
+            "manufacturer": "Portainer"
+            }
+
     async def async_update(self):
         """Update the server's state and attributes."""
         endpoint_info = self._portainer_obj["endpoints"][self._endpoint_index]
