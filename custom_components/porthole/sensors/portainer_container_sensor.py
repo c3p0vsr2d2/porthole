@@ -13,6 +13,8 @@ from homeassistant.util import Throttle
 
 from ..portainer_server import PortainerServer
 
+_LOGGER = logging.getLogger(__name__)
+
 class PortainerContainerSensor(SensorEntity):
     """Sensor representing a Portainer container."""
     
