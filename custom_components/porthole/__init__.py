@@ -17,6 +17,8 @@ from .const import *
 from .setup import async_setup_entry, async_setup_entry, async_unload_entry, async_reload
 from .portainer_server import PortainerServer
 
+_LOGGER = logging.getLogger(__name__)
+
 # Define platform names as constants to avoid magic strings
 PLATFORM_SENSOR = "setup"
 
