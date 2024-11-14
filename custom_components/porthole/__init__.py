@@ -14,7 +14,7 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.util import Throttle
 
 from .const import *
-from .setup import async_setup_entry, async_setup_entry, async_unload_entry, async_reload
+from .setup import async_setup_entry, async_unload_entry, async_reload
 from .portainer_server import PortainerServer
 
 _LOGGER = logging.getLogger(__name__)
@@ -59,11 +59,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.error("Error unloading sensor platform for Portainer: %s", ex)
 
     # Clean up any stored data
-    if DOMAIN in hass.data:
+    data = hass.data.get(DOMAIN)
+    if data:
         del hass.data[DOMAIN]
         _LOGGER.info("Portainer integration data has been removed from hass.data.")
     else:
-        _LOGGER.warning("Portainer integration data not found in hass.data.")
+        _LOGGER.warning("Portainer integration data was not found in hass.data.")
 
     return True
 
@@ -75,11 +76,10 @@ async def async_reload(hass: HomeAssistant, entry: ConfigEntry):
     try:
         await async_unload_entry(hass, entry)
         await async_setup_entry(hass, entry)
-        _LOGGER.info("Portainer integration reloaded successfully.")
     except Exception as ex:
-        _LOGGER.error("Error reloading Portainer integration: %s", ex)
-        return False  # Return False to indicate failure
-
+        _LOGGER.error(f"Error reloading Portainer integration: {ex}")
+        return False
+    _LOGGER.info("Portainer integration reloaded successfully.")
     return True
 
 
