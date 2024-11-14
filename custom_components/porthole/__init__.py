@@ -2,6 +2,16 @@ from .const import *
 from .setup import async_setup_entry, async_setup_entry, async_unload_entry, async_reload
 from .portainer_server import PortainerServer
 
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers import discovery
+from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.switch import SwitchEntity
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.device_registry import DeviceEntry
+from homeassistant.util import Throttle
+
 # Define platform names as constants to avoid magic strings
 PLATFORM_SENSOR = "setup"
 
