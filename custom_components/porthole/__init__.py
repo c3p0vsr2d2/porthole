@@ -14,72 +14,74 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.util import Throttle
 
 from .const import *
-# from .setup_porthole import async_setup_entry, async_unload_entry, async_reload
-# from .portainer_server import PortainerServer
 
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
 PLATFORMS = "sensor"
 
-async def async_setup(hass: HomeAssistant, config: dict):
-    """Set up the Portainer integration without a config entry."""
-    _LOGGER.info("Setting up Portainer integration without config entry.")
+async def async_setup(hass: HomeAssistant, config: dict) -> bool:
+    """Set up the Porthole integration without a config entry."""
+    _LOGGER.info("Setting up Porthole integration without a config entry.")
     # If there is setup logic that doesn't require config entries, add it here
     # For now, it seems like there is nothing to initialize without a config entry.
     return True
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up Portainer from a config entry."""
-    _LOGGER.info("Setting up Portainer integration with config entry.")
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up Porthole from a config entry."""
+    _LOGGER.info("Setting up Porthole integration with config entry.")
 
     # Store the config entry data to access later
-    hass.data[DOMAIN] = entry.data
+    if DOMAIN not in hass.data:
+        hass.data[DOMAIN] = entry_data
+        _LOGGER.info("Porthole integration data stored in hass.data.")
+    else:
+        _LOGGER.debug("Porthole integration data already exists in hass.data.")
 
     # Forward the configuration to the sensor platform
     try:
         await hass.config_entries.async_forward_entry_setups(entry, [PLATFORMS])
-        _LOGGER.info("Successfully set up sensor platform for Portainer.")
+        _LOGGER.info("Successfully set up sensor platform for Porthole.")
     except Exception as ex:
-        _LOGGER.error("Failed to set up sensor platform for Portainer: %s", ex)
+        _LOGGER.error("Failed to set up sensor platform for Porthole: %s", ex)
         return False  # Return False to indicate failure
 
     return True
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Unload a Portainer config entry."""
-    _LOGGER.info("Unloading Portainer integration.")
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a Porthole config entry."""
+    _LOGGER.info("Unloading Porthole integration.")
 
     # Unload the sensor platform if necessary
     try:
         unloaded = await hass.config_entries.async_forward_entry_unload(entry, PLATFORMS)
         if not unloaded:
-            _LOGGER.warning("Failed to unload sensor platform for Portainer.")
+            _LOGGER.warning("Failed to unload sensor platform for Porthole.")
     except Exception as ex:
-        _LOGGER.error("Error unloading sensor platform for Portainer: %s", ex)
+        _LOGGER.error("Error unloading sensor platform for Porthole: %s", ex)
 
     # Clean up any stored data
     data = hass.data.get(DOMAIN)
     if data:
         del hass.data[DOMAIN]
-        _LOGGER.info("Portainer integration data has been removed from hass.data.")
+        _LOGGER.info("Porthole integration data has been removed from hass.data.")
     else:
-        _LOGGER.warning("Portainer integration data was not found in hass.data.")
-
+        _LOGGER.warning("Porthole integration data was not found in hass.data.")
+    
     return True
 
-async def async_reload(hass: HomeAssistant, entry: ConfigEntry):
-    """Reload the Portainer integration."""
-    _LOGGER.info("Reloading Portainer integration...")
-
-    # Unload and then reload the entry
+async def async_reload(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Reload the Porthole integration: Unloads and re-sets up the integration."""
+    _LOGGER.info("Reloading Porthole integration...")
+    
     try:
         await async_unload_entry(hass, entry)
         await async_setup_entry(hass, entry)
     except Exception as ex:
-        _LOGGER.error(f"Error reloading Portainer integration: {ex}")
+        _LOGGER.error(f"Error reloading Porthole integration: {ex}")
         return False
-    _LOGGER.info("Portainer integration reloaded successfully.")
+    
+    _LOGGER.info("Porthole integration reloaded successfully.")
     return True
 
 
