@@ -8,6 +8,7 @@ from homeassistant.components.switch import SwitchEntity
 
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceEntry
+from typing import List, Dict, Optional, Union
 import asyncio
 from homeassistant.util import Throttle
 
@@ -19,44 +20,45 @@ _LOGGER = logging.getLogger(__name__)
 class PortainerServer:
     """Class to handle communication with the Portainer API."""
     
-    def __init__(self, url, username, password):
-        self._url = url
-        self._username = username
-        self._password = password
-        self._jwt = None
-        self._session = None  # Reuse a session for all HTTP requests
+    def __init__(self, url: str, username: str, password: str) -> None:
+        self._url: str = url
+        self._username: str = username
+        self._password: str = password
+        self._jwt: Optional[str] = None
+        self._session: Optional[aiohttp.ClientSession] = None  # Reuse a session for all HTTP requests
 
-        self.portainer_obj = {}
+        self.portainer_obj: Dict[str, Union[List[str], List[Dict[str, Any]], int]] = {}
 
-    async def _get_session(self):
+    async def _get_session(self) -> aiohttp.ClientSession:
         """Create a session for HTTP requests."""
         if not self._session:
             self._session = aiohttp.ClientSession()
         return self._session
 
-    async def close(self):
+    async def close(self) -> None:
         """Close the session once done."""
         if self._session:
             await self._session.close()
         
     @Throttle(MIN_TIME_BETWEEN_UPDATES)  # Throttle the updates
-    async def update(self):
+    async def update(self) -> None:
         """Update the data from Portainer API."""
         if not self._jwt:
             self._jwt = await self._get_jwt()
 
         if self._jwt:
-            self.portainer_obj = {}
-            self.portainer_obj["attributes"] = []
-            self.portainer_obj["name"] = f"portainer_main_server"
-            self.portainer_obj["friendly_name"] = self.portainer_obj["name"]
-            self.portainer_obj["endpoint_ids"] =  []
-            self.portainer_obj["endpoints"] =  []
-            self.portainer_obj["endpoint_names"] =  []
-            self.portainer_obj["measured_num_endpoints"] = 0
-            self.portainer_obj["total_container_count"] = 0
-            self.portainer_obj["measured_total_num_containers"] = 0
-            self.portainer_obj["all_container_names_list"] = []
+            self.portainer_obj = {
+                "attributes": [],
+                "name": "portainer_main_server",
+                "friendly_name": "portainer_main_server",
+                "endpoint_ids": [],
+                "endpoints": [],
+                "endpoint_names": [],
+                "measured_num_endpoints": 0,
+                "total_container_count": 0,
+                "measured_total_num_containers": 0,
+                "all_container_names_list": []
+            }
 
             self.portainer_obj["portainer_id"], self.portainer_obj["portainer_version"] = await self._get_status()
 
@@ -125,7 +127,7 @@ class PortainerServer:
         else:
             _LOGGER.error("Failed to authenticate with Portainer.")
 
-    async def _get_jwt(self):
+    async def _get_jwt(self) -> Optional[str]:
         """Get JWT for authentication."""
         try:
             async with aiohttp.ClientSession() as session:
@@ -137,7 +139,7 @@ class PortainerServer:
             _LOGGER.error(f"Failed to get JWT: {e}")
             return None
 
-    async def _get_endpoints(self):
+    async def _get_endpoints(self) -> List[Dict[str, Any]]:
         """Get the list of endpoints."""
         try:
             async with aiohttp.ClientSession() as session:
@@ -148,7 +150,7 @@ class PortainerServer:
             _LOGGER.error(f"Failed to get endpoints: {e}")
             return []
 
-    async def _get_containers(self, endpoint_id):
+    async def _get_containers(self, endpoint_id: str) -> List[Dict[str, Any]]:
         """Get containers for a given endpoint."""
         try:
             async with aiohttp.ClientSession() as session:
@@ -162,7 +164,7 @@ class PortainerServer:
             _LOGGER.error(f"Failed to get containers for endpoint {endpoint_id}: {e}")
             return []
 
-    async def _get_status(self):
+    async def _get_status(self) -> tuple[Optional[str], Optional[str]]:
         """Get the status of the Portainer instance."""
         try:
             async with aiohttp.ClientSession() as session:
@@ -174,7 +176,7 @@ class PortainerServer:
             _LOGGER.error(f"Failed to get status: {e}")
             return None, None
 
-    def _get_ports(self, in_container):
+    def _get_ports(self, in_container: Dict[str, Any]) -> List[str]:
         """Helper function to get and format container ports."""
         ports = []
         if "Ports" in in_container:
@@ -186,10 +188,10 @@ class PortainerServer:
                 if public_port != "N/A" and private_port != "N/A":
                     ports.append(f"{public_port}->{private_port}/{port_type}")
         return ports if ports else ["No ports exposed"]  # Return a default message if no ports are found
-        
-    async def start_container(self, endpoint_id, container_id):
-        # Build the start URL
-        start_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/start"
+
+    async def start_container(self, endpoint_id: str, container_id: str) -> Optional[int]:
+        """Start a container given its endpoint and container ID."""
+        start_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/start"
         headers = {"Authorization": f"Bearer {self._jwt}"}
 
         async with aiohttp.ClientSession() as session:
@@ -197,17 +199,16 @@ class PortainerServer:
             async with session.post(start_url, headers=headers) as response:
                 if response.status == 204:
                     # Successfully started, no content to return
-                    print(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
-                    return response.status  # Or just return the status code if no data is needed
+                    _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
+                    return response.status
                 else:
-                    # If the request fails, print the error message
-                    print(f"Failed to start container with ID '{container_id}': {await response.text()}")
+                    _LOGGER.error(f"Failed to start container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
                     return None
                 
-    async def stop_container(self, endpoint_id, container_id):
-        # Build the start URL
-        stop_url = f"{self.base_url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
+    async def stop_container(self, endpoint_id: str, container_id: str) -> Optional[int]:
+        """Stop a container given its endpoint and container ID."""
+        stop_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
         headers = {"Authorization": f"Bearer {self._jwt}"}
 
         async with aiohttp.ClientSession() as session:
@@ -215,10 +216,9 @@ class PortainerServer:
             async with session.post(stop_url, headers=headers) as response:
                 if response.status == 204:
                     # Successfully stopped, no content to return
-                    print(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
-                    return response.status  # Or just return the status code if no data is needed
+                    _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
+                    return response.status
                 else:
-                    # If the request fails, print the error message
-                    print(f"Failed to stop container with ID '{container_id}': {await response.text()}")
+                    _LOGGER.error(f"Failed to stop container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
                     return None
