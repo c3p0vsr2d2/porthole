@@ -19,8 +19,10 @@ class PortainerContainerSwitch(SwitchEntity):
         self._portainer_obj = self._portainer.portainer_obj
         self._endpoint_index = endpoint_index
         self._container_index = container_index
+
         self._endpoint_id = self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_id"]
         self._container_id = self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_id"]
+        self._name = self._self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_switch_name"]
         
     @property
     def unique_id(self):
