@@ -68,8 +68,8 @@ class PortainerServer:
             temp_endpoints = await self._get_endpoints()
             self.portainer_obj["measured_num_endpoints"] = len(temp_endpoints)
 
-            self.portainer_obj["server_sensor_name"]. = f"[PSS][{temp_endpoint_id}][portainer_server_{self.portainer_obj["portainer_id"]}_sensor]"
-            self.portainer_obj["server_sensor_unique_id"] = f"portainer_server_{self.portainer_obj["portainer_id"]}_sensor"
+            self.portainer_obj["server_sensor_name"]. = f'[PSS][{temp_endpoint_id}][portainer_server_{self.portainer_obj["portainer_id"]}_sensor]'
+            self.portainer_obj["server_sensor_unique_id"] = f'portainer_server_{self.portainer_obj["portainer_id"]}_sensor'
 
             if self.portainer_obj["measured_num_endpoints"] == 0:
                 _LOGGER.error("No endpoints found in Portainer.")
@@ -89,9 +89,9 @@ class PortainerServer:
                 self.portainer_obj["endpoints"][temp_endpoint_index] = {}
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_id"] = temp_endpoint_id
                 self.portainer_obj["endpoints"][temp_endpoint_index]["name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}"
-                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_device_name"] = f"[PED][{temp_endpoint_index}][{self.portainer_obj["endpoints"][temp_endpoint_index]["name"]}]"
+                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_device_name"] = f'[PED][{temp_endpoint_index}][{self.portainer_obj["endpoints"][temp_endpoint_index]["name"]}]'
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_device_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_device"
-                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_name"] = f"[PES][{temp_endpoint_id}][portainer_endpoint_{temp_endpoint_id:0>3}_sensor]"
+                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_name"] = f'[PES][{temp_endpoint_id}][portainer_endpoint_{temp_endpoint_id:0>3}_sensor]'
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_sensor"
                 self.portainer_obj["endpoints"][temp_endpoint_index]["friendly_name"] = temp_endpoint["Name"]
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_url"] = temp_endpoint["URL"]
@@ -122,9 +122,9 @@ class PortainerServer:
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"].append({})
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["state"] = temp_container["State"]
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}"
-                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_sensor_name"] = f"[PCS][{temp_endpoint_id:0>3}][{temp_container_index:0>3}][portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_sensor]"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_sensor_name"] = f'[PCS][{temp_endpoint_id:0>3}][{temp_container_index:0>3}][portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_sensor]'
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_sensor_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_sensor"
-                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_switch_name"] = f"[PCW][{temp_endpoint_id:0>3}][{temp_container_index:0>3}][portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_switch]"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_switch_name"] = f'[PCW][{temp_endpoint_id:0>3}][{temp_container_index:0>3}][portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_switch]'
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_switch_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_switch"
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["image"] = temp_container["Image"]
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_id"] = temp_container["Id"]
