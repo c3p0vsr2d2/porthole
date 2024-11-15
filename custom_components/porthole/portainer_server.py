@@ -212,7 +212,7 @@ class PortainerServer:
             async with session.post(start_url, headers=headers) as response:
                 if response.status == 204:
                     # Successfully started, no content to return
-                    _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
+                    _LOGGER.error(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
                     self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
                     return True
                 else:
@@ -231,7 +231,7 @@ class PortainerServer:
             async with session.post(stop_url, headers=headers) as response:
                 if response.status == 204:
                     # Successfully stopped, no content to return
-                    _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
+                    _LOGGER.error(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
                     self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "stopped"
                     return True
                 else:
