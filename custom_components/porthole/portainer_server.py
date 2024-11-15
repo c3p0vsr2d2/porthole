@@ -229,7 +229,7 @@ class PortainerServer:
 
         return False
                 
-   async def stop_container(self, endpoint_id: str, container_id: str) -> bool:
+    async def stop_container(self, endpoint_id: str, container_id: str) -> bool:
         """Stop a container given its endpoint and container ID."""
         stop_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
         headers = {"Authorization": f"Bearer {self._jwt}"}
