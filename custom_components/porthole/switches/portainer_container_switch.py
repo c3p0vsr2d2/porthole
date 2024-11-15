@@ -31,7 +31,7 @@ class PortainerContainerSwitch(SwitchEntity):
     @property
     def name(self):
         """Return the name of the entity."""
-        rreturn self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_switch_name"]
+        return self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_switch_name"]
 
     @property
     def state(self):
