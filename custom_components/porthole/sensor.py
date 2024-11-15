@@ -78,13 +78,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
                     PortainerContainerSensor(portainer, endpoint_index, container_index)
                     for container_index in range(0, portainer.portainer_obj["endpoints"][endpoint_index]["measured_num_containers"])
                 ]
+                # Now, add them all at once
+                async_add_entities(container_sensors, update_before_add=True)
+                
                 # Create container switches associated with the device
                 container_switches = [
                     PortainerContainerSwitch(portainer, endpoint_index, container_index)
                     for container_index in range(0, portainer.portainer_obj["endpoints"][endpoint_index]["measured_num_containers"])
                 ]
                 # Now, add them all at once
-                async_add_entities(container_sensors, update_before_add=True)
                 async_add_entities(container_switches, update_before_add=True)
             except Exception as e:
                 _LOGGER.error(f"Error adding Portainer Container Sensors: {e}")
