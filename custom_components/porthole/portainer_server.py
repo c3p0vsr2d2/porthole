@@ -220,13 +220,9 @@ class PortainerServer:
                         # Log the response status and text for debugging
                         _LOGGER.error(f"Failed to start container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
                         response.raise_for_status()  # Will raise exception for 4xx/5xx responses
-            except aiohttp.ClientError as e:
+            except Exception as e:
                 # Catch any network-related errors
                 _LOGGER.error(f"Error starting container with ID '{container_id}': {str(e)}")
-            except Exception as e:
-                # Catch all other exceptions
-                _LOGGER.error(f"Unexpected error: {str(e)}")
-
         return False
                 
     async def stop_container(self, endpoint_id: str, container_id: str, endpoint_index, container_index) -> bool:
@@ -247,11 +243,7 @@ class PortainerServer:
                         # Log the response status and text for debugging
                         _LOGGER.warning(f"Failed to stop container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
                         response.raise_for_status()  # Will raise exception for 4xx/5xx responses
-            except aiohttp.ClientError as e:
+            except Exception as e:
                 # Catch any network-related errors
                 _LOGGER.error(f"Error stopping container with ID '{container_id}': {str(e)}")
-            except Exception as e:
-                # Catch all other exceptions
-                _LOGGER.error(f"Unexpected error: {str(e)}")
-
         return False
