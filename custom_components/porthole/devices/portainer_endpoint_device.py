@@ -66,12 +66,12 @@ class PortainerEndpointDevice(Entity):
     @property
     def unique_id(self):
         """Return a unique ID for the device."""
-        return self.name()
+        return self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_device_unique_id"]
     
     @property
     def name(self):
         """Return the name of the device."""
-        return (self._portainer_obj["endpoints"][self._endpoint_index]["name"] + "_device")
+        return self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_device_name"]
 
     @property
     def state(self):
