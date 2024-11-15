@@ -30,12 +30,12 @@ class PortainerContainerSensor(SensorEntity):
     def unique_id(self):
         """Return a unique ID for the entity, based on container name."""
         _LOGGER.debug(self._container_index)
-        return self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["name"]
+        return self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_switch_unique_id"]
 
     @property
     def name(self):
         """Return the name of the entity."""
-        return self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["name"]
+        return self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_switch_name"]
 
     @property
     def state(self):
