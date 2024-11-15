@@ -56,7 +56,7 @@ class PortainerEndpointDevice(Entity):
         device_registry.async_get_or_create(
             config_entry_id=entry.entry_id,
             identifiers={(f"portainer_{self._portainer_obj["portainer_id"]}", self._portainer_obj["endpoints"][endpoint_index]["endpoint_id"])},
-            name=self._portainer_obj["endpoints"][endpoint_index]["name"],
+            name=self._portainer_obj["endpoints"][endpoint_index]["endpoint_device_name"],
             manufacturer="Portainer",
             model="Portainer Endpoint",
             sw_version=self._portainer_obj["portainer_version"],
