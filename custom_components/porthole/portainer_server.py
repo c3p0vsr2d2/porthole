@@ -208,34 +208,50 @@ class PortainerServer:
         headers = {"Authorization": f"Bearer {self._jwt}"}
 
         async with aiohttp.ClientSession() as session:
-            # Use POST request to start the container
-            async with session.post(start_url, headers=headers) as response:
-                if response.status == 204:
-                    # Successfully started, no content to return
-                    _LOGGER.error(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
-                    self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
-                    return True
-                else:
-                    _LOGGER.error(f"Failed to start container with ID '{container_id}': {await response.text()}")
-                    response.raise_for_status()  # Raise exception for 4xx/5xx responses
-                    return False
+            try:
+                # Use POST request to start the container
+                async with session.post(start_url, headers=headers) as response:
+                    if response.status == 204:
+                        # Successfully started, no content to return
+                        _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
+                        self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
+                        return True
+                    else:
+                        # Log the response status and text for debugging
+                        _LOGGER.error(f"Failed to start container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
+                        response.raise_for_status()  # Will raise exception for 4xx/5xx responses
+            except aiohttp.ClientError as e:
+                # Catch any network-related errors
+                _LOGGER.error(f"Error starting container with ID '{container_id}': {str(e)}")
+            except Exception as e:
+                # Catch all other exceptions
+                _LOGGER.error(f"Unexpected error: {str(e)}")
+
         return False
                 
-    async def stop_container(self, endpoint_id: str, container_id: str) -> bool:
+   async def stop_container(self, endpoint_id: str, container_id: str) -> bool:
         """Stop a container given its endpoint and container ID."""
         stop_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
         headers = {"Authorization": f"Bearer {self._jwt}"}
 
         async with aiohttp.ClientSession() as session:
-            # Use POST request to start the container
-            async with session.post(stop_url, headers=headers) as response:
-                if response.status == 204:
-                    # Successfully stopped, no content to return
-                    _LOGGER.error(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
-                    self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "stopped"
-                    return True
-                else:
-                    _LOGGER.error(f"Failed to stop container with ID '{container_id}': {await response.text()}")
-                    response.raise_for_status()  # Raise exception for 4xx/5xx responses
-                    return False
+            try:
+                # Use POST request to stop the container
+                async with session.post(stop_url, headers=headers) as response:
+                    if response.status == 204:
+                        # Successfully stopped, no content to return
+                        _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{containear_id}' stopped successfully.")
+                        self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "stopped"
+                        return True
+                    else:
+                        # Log the response status and text for debugging
+                        _LOGGER.warning(f"Failed to stop container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
+                        response.raise_for_status()  # Will raise exception for 4xx/5xx responses
+            except aiohttp.ClientError as e:
+                # Catch any network-related errors
+                _LOGGER.error(f"Error stopping container with ID '{container_id}': {str(e)}")
+            except Exception as e:
+                # Catch all other exceptions
+                _LOGGER.error(f"Unexpected error: {str(e)}")
+
         return False
