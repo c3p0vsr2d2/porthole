@@ -50,12 +50,14 @@ class PortainerContainerSwitch(SwitchEntity):
         """Turn the switch on."""
         _LOGGER.info(f"Turning on the switch: {self._name}")
         response = self._portainer.start_container(self._endpoint_id, self._container_id)
+        self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
         """Turn the switch off."""
         _LOGGER.info(f"Turning off the switch: {self._name}")
         response = self._portainer.stop_container(self._endpoint_id, self._container_id)
-        
+        self.schedule_update_ha_state()
+
     @property
     def icon(self):
         """Return the icon to represent this container."""
