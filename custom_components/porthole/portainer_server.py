@@ -218,7 +218,8 @@ class PortainerServer:
                         return True
                     else:
                         # Log the response status and text for debugging
-                        _LOGGER.error(f"Failed to start container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
+                        # _LOGGER.error(f"Failed to start container with ID '{container_id}', Status Code: {response.status}, Response: {await response.text()}")
+                        _LOGGER.error(f"Failed to start container with ID '{container_id}', Status Code: {response.status}.")
                         response.raise_for_status()  # Will raise exception for 4xx/5xx responses
             except Exception as e:
                 # Catch any network-related errors
