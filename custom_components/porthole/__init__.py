@@ -15,11 +15,12 @@ from homeassistant.util import Throttle
 
 from .const import *
 from .portainer_server import PortainerServer
+from .devices.portainer_endpoint_device import PortainerEndpointDevice
 
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
-PLATFORMS = "sensor"
+PLATFORMS = ["sensor", "switch"]
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the Porthole integration without a config entry."""
@@ -39,12 +40,38 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     else:
         _LOGGER.debug("Porthole integration data already exists in hass.data.")
 
+    """Set up Portainer from a config entry."""
+    _LOGGER.debug("Setting up Portainer integration with config entry.")
+    
+    # Use the configuration data stored in the config entry
+    url = entry.data.get("url")
+    username = entry.data.get("username")
+    password = entry.data.get("password")
+
+    if not url or not username or not password:
+        _LOGGER.error("URL, username, or password not provided.")
+        return
+
+    try:
+        # Initialize the PortainerServer object for fetching data
+        entry.portainer = PortainerServer(url, username, password)
+        await entry.portainer.update()  # Run the update asynchronously
+
+        # Add a device for each endpoint
+        for endpoint_index in range(0, portainer.portainer_obj["measured_num_endpoints"]):
+            endpoint_id = entry.portainer.portainer_obj["endpoint_ids"][endpoint_index]
+            device = PortainerEndpointDevice(hass, entry, url, portainer, endpoint_index)
+    
+    except Exception as e:
+        _LOGGER.error(f"Error initializing Portainer data: {e}")
+        return False
+
     # Forward the configuration to the sensor platform
     try:
         await hass.config_entries.async_forward_entry_setups(entry, [PLATFORMS])
-        _LOGGER.info("Successfully set up sensor platform for Porthole.")
+        _LOGGER.info("Successfully set up sensor/switch platforms for Porthole.")
     except Exception as ex:
-        _LOGGER.error("Failed to set up sensor platform for Porthole: %s", ex)
+        _LOGGER.error("Failed to set up sensor/switch platforms for Porthole: %s", ex)
         return False  # Return False to indicate failure
 
     return True
