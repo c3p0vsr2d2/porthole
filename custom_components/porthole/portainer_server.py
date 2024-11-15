@@ -68,7 +68,7 @@ class PortainerServer:
             temp_endpoints = await self._get_endpoints()
             self.portainer_obj["measured_num_endpoints"] = len(temp_endpoints)
 
-            self.portainer_obj["server_sensor_name"]. = f'[PSS][{temp_endpoint_id}][portainer_server_{self.portainer_obj["portainer_id"]}_sensor]'
+            self.portainer_obj["server_sensor_name"] = f'[PSS][{temp_endpoint_id}][portainer_server_{self.portainer_obj["portainer_id"]}_sensor]'
             self.portainer_obj["server_sensor_unique_id"] = f'portainer_server_{self.portainer_obj["portainer_id"]}_sensor'
 
             if self.portainer_obj["measured_num_endpoints"] == 0:
