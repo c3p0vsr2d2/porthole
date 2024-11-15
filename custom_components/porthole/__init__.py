@@ -58,9 +58,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await entry.portainer.update()  # Run the update asynchronously
 
         # Add a device for each endpoint
-        for endpoint_index in range(0, portainer.portainer_obj["measured_num_endpoints"]):
+        for endpoint_index in range(0, entry.portainer.portainer_obj["measured_num_endpoints"]):
             endpoint_id = entry.portainer.portainer_obj["endpoint_ids"][endpoint_index]
-            device = PortainerEndpointDevice(hass, entry, url, portainer, endpoint_index)
+            device = PortainerEndpointDevice(hass, entry, url, entry.portainer, endpoint_index)
     
     except Exception as e:
         _LOGGER.error(f"Error initializing Portainer data: {e}")
