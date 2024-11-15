@@ -14,6 +14,7 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.util import Throttle
 
 from .const import *
+from .portainer_server import PortainerServer
 
 _LOGGER = logging.getLogger(__name__)
 
