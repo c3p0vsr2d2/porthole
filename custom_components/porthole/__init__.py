@@ -68,7 +68,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Forward the configuration to the sensor platform
     try:
-        await hass.config_entries.async_forward_entry_setups(entry, [PLATFORMS])
+        await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
         _LOGGER.info("Successfully set up sensor/switch platforms for Porthole.")
     except Exception as ex:
         _LOGGER.error("Failed to set up sensor/switch platforms for Porthole: %s", ex)
