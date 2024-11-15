@@ -14,11 +14,9 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.util import Throttle
 
 from .portainer_server import PortainerServer
-from .devices.portainer_endpoint_device import PortainerEndpointDevice
 from .sensors.portainer_server_sensor import PortainerServerSensor
 from .sensors.portainer_endpoint_sensor import PortainerEndpointSensor
 from .sensors.portainer_container_sensor import PortainerContainerSensor
-from .switches.portainer_container_switch import PortainerContainerSwitch
 
 _LOGGER = logging.getLogger(__name__)
 
