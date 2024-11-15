@@ -25,12 +25,12 @@ class PortainerServerSensor(SensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID for the entity, based on Portainer instance ID."""
-        return self._portainer_obj["name"]
+        return self._portainer_obj["server_sensor_unique_id"]
 
     @property
     def name(self):
         """Return the name of the entity."""
-        return self._portainer_obj["name"]
+        return self._portainer_obj["server_sensor_name"]
 
     @property
     def state(self):
