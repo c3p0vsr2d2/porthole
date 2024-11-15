@@ -77,6 +77,8 @@ class PortainerServer:
                 # Update portainer object
                 self.portainer_obj["endpoint_ids"].append(temp_endpoint_id)
                 self.portainer_obj["endpoint_names"].append(temp_endpoint["Name"])
+                self.portainer_obj["server_sensor_name"]. = f"portainer_server_{temp_endpoint_id:0>3}_sensor"
+                self.portainer_obj["server_sensor_unique_id"] = f"portainer_server_{temp_endpoint_id:0>3}_sensor"
 
                 # Update portainer/endpoint object
                 subdict = temp_endpoint["Snapshots"][0]
@@ -84,6 +86,8 @@ class PortainerServer:
                 self.portainer_obj["endpoints"][temp_endpoint_index] = {}
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_id"] = temp_endpoint_id
                 self.portainer_obj["endpoints"][temp_endpoint_index]["name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}"
+                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_sensor"
+                self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_sensor"
                 self.portainer_obj["endpoints"][temp_endpoint_index]["friendly_name"] = temp_endpoint["Name"]
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_url"] = temp_endpoint["URL"]
                 self.portainer_obj["endpoints"][temp_endpoint_index]["total_cpu"] = subdict["TotalCPU"]
@@ -113,6 +117,10 @@ class PortainerServer:
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"].append({})
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["state"] = temp_container["State"]
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_sensor_name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_sensor"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_sensor_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_sensor"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_switch_name"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_switch"
+                    self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_switch_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_container_{(temp_container["Names"][0].strip("/")).lower()}_switch"
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["image"] = temp_container["Image"]
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["container_id"] = temp_container["Id"]
                     self.portainer_obj["endpoints"][temp_endpoint_index]["containers"][temp_container_index]["created"] = datetime.fromtimestamp(temp_container["Created"]).strftime("%Y%m%dT%H:%M:%S")
