@@ -202,7 +202,7 @@ class PortainerServer:
                     ports.append(f"{public_port}->{private_port}/{port_type}")
         return ports if ports else ["No ports exposed"]  # Return a default message if no ports are found
 
-    async def start_container(self, endpoint_id: str, container_id: str) -> Optional[int]:
+    async def start_container(self, endpoint_id: str, container_id: str) -> bool:
         """Start a container given its endpoint and container ID."""
         start_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/start"
         headers = {"Authorization": f"Bearer {self._jwt}"}
@@ -213,13 +213,15 @@ class PortainerServer:
                 if response.status == 204:
                     # Successfully started, no content to return
                     _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' started successfully.")
-                    return response.status
+                    self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "running"
+                    return True
                 else:
                     _LOGGER.error(f"Failed to start container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
-                    return None
+                    return False
+        return False
                 
-    async def stop_container(self, endpoint_id: str, container_id: str) -> Optional[int]:
+    async def stop_container(self, endpoint_id: str, container_id: str) -> bool:
         """Stop a container given its endpoint and container ID."""
         stop_url = f"{self._url}/api/endpoints/{endpoint_id}/docker/containers/{container_id}/stop"
         headers = {"Authorization": f"Bearer {self._jwt}"}
@@ -230,8 +232,10 @@ class PortainerServer:
                 if response.status == 204:
                     # Successfully stopped, no content to return
                     _LOGGER.info(f"Endpoint ID {endpoint_id}, Container with ID '{container_id}' stopped successfully.")
-                    return response.status
+                    self.portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] = "stopped"
+                    return True
                 else:
                     _LOGGER.error(f"Failed to stop container with ID '{container_id}': {await response.text()}")
                     response.raise_for_status()  # Raise exception for 4xx/5xx responses
-                    return None
+                    return False
+        return False
