@@ -88,7 +88,7 @@ class PortainerServer:
                 self.portainer_obj["endpoints"].append({})
                 self.portainer_obj["endpoints"][temp_endpoint_index] = {}
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_id"] = temp_endpoint_id
-                self.portainer_obj["endpoints"][temp_endpoint_index]["name"] = self.portainer_obj["endpoints"][temp_endpoint_index]["name"]
+                self.portainer_obj["endpoints"][temp_endpoint_index]["name"] = temp_endpoint["Name"]
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_device_name"] = f'[PED][{temp_endpoint_index}][{self.portainer_obj["endpoints"][temp_endpoint_index]["name"]}]'
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_device_unique_id"] = f"portainer_endpoint_{temp_endpoint_id:0>3}_device"
                 self.portainer_obj["endpoints"][temp_endpoint_index]["endpoint_sensor_name"] = f'[PES][{temp_endpoint_id}][Portainer Endpoint {temp_endpoint_id:0>3} Sensor]'
