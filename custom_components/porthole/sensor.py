@@ -26,10 +26,9 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, entry, async_add_entities):
 
     """Set up Portainer from a config entry."""
-    _LOGGER.error("Setting up Portainer integration with config entry.")        ##
+    _LOGGER.info("Setting up Portainer integration with config entry.")
 
     portainer = entry.portainer
-     _LOGGER.error("1 entry.")        ##
     try:
         # Add a server sensor for the Portainer server itself
         server_sensor = PortainerServerSensor(portainer)
@@ -37,8 +36,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
     except Exception as e:
         _LOGGER.error(f"Error adding Portainer Server sensor: {e}")
         return False
-
-    _LOGGER.error("1 entry.")        ##
         
     try:
         # Add endpoint sensors and container sensors for each endpoint
