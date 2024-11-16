@@ -39,7 +39,7 @@ class PortainerContainerSwitch(SwitchEntity):
     def state(self):
         """Return the current state of the container (status)."""
         # Use the "Status" field from Portainer to represent the state
-        return 1 if (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running") else 0
+        return (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running")
 
     @property
     def is_on(self) -> bool:
