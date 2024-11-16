@@ -45,7 +45,7 @@ class PortainerContainerSwitch(SwitchEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the switch is on."""
-        return (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running")
+        return self._state == "on"
 
     def turn_on(self, **kwargs) -> None:
         """Turn the switch on."""
