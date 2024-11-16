@@ -19,6 +19,7 @@ class PortainerContainerSwitch(SwitchEntity):
         self._portainer_obj = self._portainer.portainer_obj
         self._endpoint_index = endpoint_index
         self._container_index = container_index
+        self._state = None
 
         self._endpoint_id = self._portainer_obj["endpoints"][self._endpoint_index]["endpoint_id"]
         self._container_id = self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["container_id"]
@@ -39,7 +40,7 @@ class PortainerContainerSwitch(SwitchEntity):
     def state(self):
         """Return the current state of the container (status)."""
         # Use the "Status" field from Portainer to represent the state
-        return "on" if (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running") else "off"
+        return self._state
 
     @property
     def is_on(self) -> bool:
@@ -50,13 +51,17 @@ class PortainerContainerSwitch(SwitchEntity):
         """Turn the switch on."""
         _LOGGER.info(f"Turning on the switch: {self._name}")
         response = self._portainer.start_container(self._endpoint_id, self._container_id, self._endpoint_index, self._container_index)
-        self.schedule_update_ha_state()
+        if (response):
+            self._state = "on" if (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running") else "off"
+            self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
         """Turn the switch off."""
         _LOGGER.info(f"Turning off the switch: {self._name}")
         response = self._portainer.stop_container(self._endpoint_id, self._container_id, self._endpoint_index, self._container_index)
-        self.schedule_update_ha_state()
+        if (response):
+            self._state = "on" if (self._portainer_obj["endpoints"][self._endpoint_index]["containers"][self._container_index]["state"] == "running") else "off"
+            self.schedule_update_ha_state()
 
     @property
     def icon(self):
