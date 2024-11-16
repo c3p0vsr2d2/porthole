@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
 # PLATFORMS = ["sensor", "switch"]
-PLATFORMS = ["sensor"]
+PLATFORMS = "sensor"
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the Porthole integration without a config entry."""
