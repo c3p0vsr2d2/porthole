@@ -20,7 +20,8 @@ from .devices.portainer_endpoint_device import PortainerEndpointDevice
 _LOGGER = logging.getLogger(__name__)
 
 # Define platform names as constants to avoid magic strings
-PLATFORMS = ["sensor", "switch"]
+# PLATFORMS = ["sensor", "switch"]
+PLATFORMS = ["sensor"]
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the Porthole integration without a config entry."""
